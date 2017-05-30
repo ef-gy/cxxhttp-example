@@ -2,18 +2,10 @@
 #include <cxxhttp/httpd.h>
 using namespace cxxhttp;
 
-template <class transport>
-static void hello(typename http::server<transport>::session &session,
-                  std::smatch &) {
+static void hello(http::sessionData &session, std::smatch &) {
   session.reply(200, "Hello World!");
 }
 
-namespace tcp {
-static httpd::servlet<transport::tcp> hello("/", ::hello<transport::tcp>);
-}
-
-namespace unix {
-static httpd::servlet<transport::unix> hello("/", ::hello<transport::unix>);
-}
+static http::servlet servlet("/", ::hello);
 
 int main(int argc, char *argv[]) { return cxxhttp::main(argc, argv); }
